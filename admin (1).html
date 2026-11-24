@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Administration privée</title>
+<style>
+:root{--v:#0f4d2e;--v2:#166b41;--o:#c9a227;--b:#f7f3e8;--t:#1b2a21;--m:#5b665f;--l:#e4dcc3}
+*{box-sizing:border-box}
+body{margin:0;background:var(--b);color:var(--t);font-family:system-ui,-apple-system,Segoe UI,sans-serif;font-size:16px}
+header{background:var(--v);color:var(--o);padding:12px 14px;font-weight:700;border-bottom:3px solid var(--o);display:flex;justify-content:space-between;align-items:center}
+header button{width:auto;margin:0;padding:6px 12px;font-size:13px;background:transparent;color:#fff;border:1px solid var(--o)}
+main{max-width:680px;margin:auto;padding:14px}
+.c{background:#fff;border:1px solid var(--l);border-radius:12px;padding:14px;margin-bottom:12px}
+label{display:block;font-size:13px;color:var(--m);margin:10px 0 4px;font-weight:600}
+input{width:100%;padding:12px;border:1px solid #cfc7ac;border-radius:8px;background:var(--b);font-size:16px}
+button{width:100%;padding:13px;border:0;border-radius:10px;background:var(--v);color:#fff;font-size:16px;font-weight:600;margin-top:12px}
+button.o{background:var(--o);color:#1b1500}
+.g{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.s{background:#fff;border:1px solid var(--l);border-radius:10px;padding:10px 4px;text-align:center;font-size:12px;color:var(--m)}
+.s b{display:block;font-size:24px;color:var(--v)}
+.row{border-bottom:1px solid var(--l);padding:10px 0}
+.row small{color:var(--m);display:block}
+.act{display:flex;gap:6px;margin-top:6px}.act button,.act a{flex:1;margin:0;padding:8px;font-size:13px;border-radius:8px;text-align:center;text-decoration:none;color:#fff;background:var(--v2)}
+.act .d{background:#b3261e}.act .w{background:#25a244}
+.bar{display:flex;align-items:center;gap:8px;font-size:14px;margin:4px 0}
+.bar i{display:block;height:10px;background:var(--o);border-radius:5px}
+.err{color:#b3261e;font-size:14px;margin-top:8px}
+.ok{color:var(--v2)}
+.hide{display:none}
+</style>
+</head>
+<body>
+<header><span>Administration privée · Danyi Todomé Daravé</span><button id="out" class="hide" onclick="auth.signOut()">Quitter</button></header>
+<main>
+<div id="login" class="c">
+<b>Connexion du Directeur général</b>
+<label>E-mail</label><input id="em" type="email" autocomplete="username">
+<label>Mot de passe</label><input id="pw" type="password" autocomplete="current-password">
+<button onclick="connexion()">Se connecter</button>
+<div id="msg" class="err"></div>
+</div>
+<div id="app" class="hide">
+<div class="g"><div class="s"><b id="sT">0</b>Total</div><div class="s"><b id="sV">0</b>Validés</div><div class="s"><b id="sA">0</b>En attente</div>
+<div class="s"><b id="sH">0</b>Hommes</div><div class="s"><b id="sF">0</b>Femmes</div><div class="s"><b id="sE">0</b>Moins de 18 ans</div></div>
+<div class="c"><b>Par quartier</b><div id="parQ"></div></div>
+<div class="c"><b>Par catégorie</b><div id="parT"></div></div>
+<div class="c"><input id="rech" placeholder="Rechercher un nom, quartier, pays..." oninput="liste()">
+<div id="liste"></div>
+<button class="o" onclick="exporter()">Télécharger la liste (Excel)</button>
+<button onclick="charger()">Actualiser</button></div>
+</div>
+</main>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+firebase.initializeApp({apiKey:"AIzaSyAQDquVqKsi0ZlE5_ZpDd_OOj36JxqlMLk",authDomain:"danyi-todome-darave.firebaseapp.com",projectId:"danyi-todome-darave",storageBucket:"danyi-todome-darave.firebasestorage.app",messagingSenderId:"67769445358",appId:"1:67769445358:web:634e48fc3af89dd56abcff"});
+var auth=firebase.auth(),db=firebase.firestore(),D=[];
+function $(i){return document.getElementById(i)}
+function esc(s){return String(s||"").replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function connexion(){$("msg").textContent="";auth.signInWithEmailAndPassword($("em").value.trim(),$("pw").value).catch(function(){$("msg").textContent="E-mail ou mot de passe incorrect."})}
+auth.onAuthStateChanged(function(u){
+$("login").className=u?"hide":"c";$("app").className=u?"":"hide";$("out").className=u?"":"hide";
+if(u)charger()});
+function age(d){if(!d)return null;return Math.floor((new Date()-new Date(d))/31557600000)}
+function charger(){
+db.collection("enrolements").orderBy("date","desc").get().then(function(s){
+D=s.docs.map(function(x){var d=x.data();d.id=x.id;return d});stats();liste()
+}).catch(function(){alert("Accès refusé. Connectez-vous avec le compte du Directeur général.");auth.signOut()})}
+function compte(k){var o={};D.forEach(function(p){var v=p[k]||"Non précisé";o[v]=(o[v]||0)+1});return o}
+function barres(o){var m=Math.max.apply(null,Object.values(o).concat([1]));return Object.keys(o).map(function(k){return '<div class="bar"><span style="width:110px">'+esc(k)+'</span><i style="width:'+(o[k]/m*120)+'px"></i><b>'+o[k]+'</b></div>'}).join("")||"Aucune donnée"}
+function stats(){
+$("sT").textContent=D.length;
+$("sV").textContent=D.filter(function(p){return p.statut=="valide"}).length;
+$("sA").textContent=D.filter(function(p){return p.statut!="valide"}).length;
+$("sH").textContent=D.filter(function(p){return p.sexe=="Homme"}).length;
+$("sF").textContent=D.filter(function(p){return p.sexe=="Femme"}).length;
+$("sE").textContent=D.filter(function(p){var a=age(p.naissance);return a!==null&&a<18}).length;
+$("parQ").innerHTML=barres(compte("quartier"));$("parT").innerHTML=barres(compte("type"))}
+function liste(){
+var q=$("rech").value.toLowerCase(),h="";
+D.forEach(function(p,i){
+var t=(p.nom+" "+p.prenoms+" "+p.quartier+" "+p.pays+" "+p.ville+" "+p.code).toLowerCase();
+if(t.indexOf(q)<0)return;
+var tel=String(p.tel||"").replace(/\D/g,"");
+h+='<div class="row"><b>'+esc(p.nom)+" "+esc(p.prenoms)+'</b> <span class="'+(p.statut=="valide"?"ok":"")+'">'+(p.statut=="valide"?"✔ validé":"en attente")+'</span>'
++'<small>'+esc(p.code)+" · "+esc(p.quartier)+" · "+esc(p.type)+'</small><small>'+esc(p.profession)+" · "+esc(p.ville)+", "+esc(p.pays)+'</small>'
++'<div class="act"><a class="w" href="https://wa.me/'+tel+'" target="_blank">WhatsApp</a>'
++(p.statut=="valide"?'':'<button onclick="valider('+i+')">Valider</button>')
++'<button class="d" onclick="suppr('+i+')">Supprimer</button></div></div>'});
+$("liste").innerHTML=h||"<p>Aucune fiche.</p>"}
+function valider(i){db.collection("enrolements").doc(D[i].id).update({statut:"valide"}).then(function(){D[i].statut="valide";stats();liste()}).catch(function(){alert("Erreur, réessayez.")})}
+function suppr(i){if(!confirm("Supprimer définitivement cette fiche ?"))return;db.collection("enrolements").doc(D[i].id).delete().then(function(){D.splice(i,1);stats();liste()})}
+function exporter(){
+var L=["Code;Nom;Prénoms;Sexe;Naissance;Quartier;Catégorie;Chef de famille;Profession;Téléphone;Ville;Pays;Statut"];
+D.forEach(function(p){L.push([p.code,p.nom,p.prenoms,p.sexe,p.naissance,p.quartier,p.type,p.chef,p.profession,p.tel,p.ville,p.pays,p.statut].map(function(v){return String(v||"").replace(/;/g,",")}).join(";"))});
+var b=new Blob(["\ufeff"+L.join("\n")],{type:"text/csv"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="recensement-danyi.csv";a.click()}
+</script>
+</body>
+</html>
