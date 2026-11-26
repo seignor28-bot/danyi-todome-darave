@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Infos et annonces · Danyi Todomé Daravé</title>
+<style>
+:root{--v:#0f4d2e;--v2:#166b41;--o:#c9a227;--b:#f7f3e8;--t:#1b2a21;--m:#5b665f;--l:#e4dcc3}
+*{box-sizing:border-box}
+body{margin:0;background:var(--b);color:var(--t);font-family:Georgia,'Times New Roman',serif;font-size:17px;line-height:1.5}
+h1,h2,h3,button,label,nav{font-family:system-ui,-apple-system,Segoe UI,sans-serif}
+header{background:var(--v);color:#fff;position:sticky;top:0;z-index:5;border-bottom:3px solid var(--o)}
+.brand{padding:10px 14px 4px;font-weight:700;letter-spacing:.5px;color:var(--o);font-size:15px;font-family:system-ui,sans-serif}
+nav{display:flex;overflow-x:auto;gap:2px;padding:0 8px 6px}
+nav button{flex:0 0 auto;background:none;border:0;color:#fff;padding:8px 12px;font-size:14px;border-radius:8px;opacity:.85}
+nav button.on{background:var(--v2);opacity:1;box-shadow:inset 0 -2px var(--o)}
+.hero{background:var(--v);color:#fff;padding:22px 16px;text-align:center;position:relative;overflow:hidden}
+.hero:before{pointer-events:none;content:"";position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent 0 22px,rgba(201,162,39,.07) 22px 24px)}
+.hero>*{position:relative}
+.hero h1{font-size:30px;margin:0 0 10px;color:#fff;line-height:1.15}
+.hero h1 span{color:var(--o)}
+.hero p{font-style:italic;color:var(--o);font-size:19px;margin:0 0 24px}
+.btn{display:inline-block;background:var(--o);color:#1b1500;border:0;border-radius:10px;padding:14px 22px;font-size:17px;font-weight:700;font-family:system-ui,sans-serif;width:auto;margin:4px}
+.btn.s{background:transparent;color:#fff;border:2px solid var(--o)}
+main{max-width:640px;margin:auto;padding:16px}
+section{display:none}section.on{display:block}
+h2{color:var(--v);font-size:23px;margin:6px 0 10px;border-bottom:2px solid var(--o);padding-bottom:6px}
+.c{background:#fff;border:1px solid var(--l);border-radius:12px;padding:14px;margin-bottom:12px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.q{background:var(--v);color:#fff;border-radius:10px;padding:12px;text-align:center;font-family:system-ui,sans-serif;font-weight:600;border-bottom:3px solid var(--o)}
+label{display:block;font-size:13px;color:var(--m);margin:12px 0 4px;font-weight:600}
+input,select{width:100%;padding:12px;border:1px solid #cfc7ac;border-radius:8px;background:var(--b);font-size:16px;color:var(--t)}
+.btn.f{width:100%;margin:16px 0 0}
+.chk{display:flex;gap:10px;align-items:flex-start;margin-top:14px;font-size:14px;font-family:system-ui,sans-serif}
+.chk input{width:22px;height:22px;flex:0 0 22px;margin:0}
+.hp{position:absolute;left:-9999px}
+.card{border:3px double var(--o);background:linear-gradient(#fff,#fbf6e4);border-radius:14px;padding:18px;text-align:center}
+.card h3{margin:0;color:var(--v);font-size:15px;text-transform:uppercase;letter-spacing:1px}
+.card .n{font-size:22px;font-weight:700;margin:12px 0 2px}
+.card .k{font-family:monospace;font-size:20px;color:var(--v);margin-top:10px;font-weight:700}
+.note{background:#fff8dc;border-left:4px solid var(--o);padding:10px 12px;border-radius:6px;font-size:14px;font-family:system-ui,sans-serif}
+footer{background:var(--v);color:#e9e5d3;text-align:center;padding:18px 14px 30px;font-size:13px;font-family:system-ui,sans-serif;border-top:3px solid var(--o)}
+.hide{display:none!important}
+.gal{display:grid;grid-template-columns:1fr 1fr;gap:8px}.gal figure{margin:0;position:relative;border-radius:10px;overflow:hidden;border-bottom:3px solid var(--o)}.gal img{width:100%;display:block;aspect-ratio:4/3;object-fit:cover}.gal figcaption{position:absolute;left:0;right:0;bottom:0;background:linear-gradient(transparent,rgba(10,58,34,.92));color:#fff;padding:16px 8px 6px;font:600 13px system-ui,sans-serif}.ban{width:100%;border-radius:12px;display:block;margin-bottom:12px;border-bottom:3px solid var(--o)}.cap{font-size:12px;color:var(--m);font-family:system-ui,sans-serif;margin:8px 0 0}
+
+.tabs{display:flex;gap:6px;margin-bottom:12px}.tabs button{margin:0;padding:11px 4px;font-size:14px;background:#fff;color:var(--v);border:2px solid var(--v)}.tabs button.on{background:var(--v);color:#fff}
+textarea{width:100%;padding:12px;border:1px solid #cfc7ac;border-radius:8px;background:var(--b);font-size:16px;min-height:80px;font-family:inherit}
+
+.badge{display:inline-block;font:700 11px system-ui,sans-serif;padding:3px 8px;border-radius:20px;background:var(--o);color:#1b1500;text-transform:uppercase;margin-bottom:6px}
+.badge.p{background:#e8e2cc;color:#5b665f}.badge.a{background:#3a3a3a;color:#fff}
+.ad img,.it img{width:100%;border-radius:8px;display:block;margin:8px 0}
+.free{border:2px dashed var(--o);text-align:center;color:var(--m)}
+.date{font-size:12px;color:var(--m);font-family:system-ui,sans-serif}
+</style></head><body>
+<header><div class="brand">DANYI TODOMÉ DARAVÉ</div><nav><button onclick="location.href='index.html'">← Accueil du site</button></nav></header>
+<div class="hero"><h1 style="font-size:24px;margin:0">Infos, avis et annonces</h1><p style="margin:6px 0 0;font-size:15px">Les nouvelles du village et de ses partenaires.</p></div>
+<main>
+<h2>Communiqués et avis</h2><div id="com"><p>Chargement...</p></div>
+<h2>Publicités</h2><div id="pubs"></div>
+</main>
+<footer>© Danyi Todomé Daravé · Les publicités sont des messages payants de leurs annonceurs.</footer>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+var WHATSAPP="22890198565",NB_EMPLACEMENTS=3;
+firebase.initializeApp({apiKey:"AIzaSyAQDquVqKsi0ZlE5_ZpDd_OOj36JxqlMLk",authDomain:"danyi-todome-darave.firebaseapp.com",projectId:"danyi-todome-darave",storageBucket:"danyi-todome-darave.firebasestorage.app",messagingSenderId:"67769445358",appId:"1:67769445358:web:634e48fc3af89dd56abcff"});var db=firebase.firestore();
+function $(i){return document.getElementById(i)}
+function esc(s){return String(s||"").replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+var today=new Date().toISOString().slice(0,10);
+function fr(d){return d?d.split("-").reverse().join("/"):""}
+function bouton(tel,txt,label){var n=String(tel||"").replace(/\D/g,"");return n?'<a class="btn" style="display:block;text-align:center;text-decoration:none;margin:8px 0 0" href="https://wa.me/'+n+'?text='+encodeURIComponent(txt)+'">'+label+'</a>':""}
+function rendre(L){
+var A=L.filter(function(a){return a.debut<=today&&a.fin>=today});
+var com=A.filter(function(a){return a.type!="pub"}).sort(function(a,b){return a.debut<b.debut?1:-1});
+$("com").innerHTML=com.map(function(a){return '<div class="c it"><span class="badge '+(a.type=="avis"?"a":"")+'">'+(a.type=="avis"?"Avis":"Communiqué")+'</span><b style="display:block">'+esc(a.titre)+'</b>'+(a.image?'<img alt="" src="'+a.image+'">':'')+'<p style="margin:6px 0">'+esc(a.texte).replace(/\n/g,"<br>")+'</p><span class="date">Publié le '+fr(a.debut)+'</span></div>'}).join("")||'<div class="c">Aucun communiqué pour le moment.</div>';
+var h="";
+for(var s=1;s<=NB_EMPLACEMENTS;s++){
+var a=A.filter(function(x){return x.type=="pub"&&String(x.emplacement)==String(s)})[0];
+if(a)h+='<div class="c ad"><span class="badge p">Publicité</span><b style="display:block">'+esc(a.titre)+'</b>'+(a.image?'<img alt="" src="'+a.image+'">':'')+'<p style="margin:6px 0">'+esc(a.texte).replace(/\n/g,"<br>")+'</p>'+bouton(a.contact,"Bonjour, j’ai vu votre publicité sur la plateforme Danyi Todomé Daravé : "+a.titre,"Contacter l’annonceur")+'</div>';
+else h+='<div class="c free"><b>Espace publicitaire à louer</b><p style="margin:6px 0;font-size:14px">Faites connaître votre activité aux habitants et à la diaspora de Danyi Todomé Daravé.</p>'+bouton(WHATSAPP,"Bonjour, je souhaite réserver l’espace publicitaire n°"+s+" sur la plateforme Danyi Todomé Daravé.","Réserver cet espace")+'</div>'}
+$("pubs").innerHTML=h}
+db.collection("annonces").where("statut","==","publie").get().then(function(s){rendre(s.docs.map(function(d){return d.data()}))}).catch(function(){rendre([])});
+</script></body></html>

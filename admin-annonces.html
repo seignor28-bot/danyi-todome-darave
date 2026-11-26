@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Administration · Annonces</title>
+<style>
+:root{--v:#0f4d2e;--v2:#166b41;--o:#c9a227;--b:#f7f3e8;--t:#1b2a21;--m:#5b665f;--l:#e4dcc3}
+*{box-sizing:border-box}
+body{margin:0;background:var(--b);color:var(--t);font-family:system-ui,-apple-system,Segoe UI,sans-serif;font-size:16px}
+header{background:var(--v);color:var(--o);padding:12px 14px;font-weight:700;border-bottom:3px solid var(--o);display:flex;justify-content:space-between;align-items:center}
+header button{width:auto;margin:0;padding:6px 12px;font-size:13px;background:transparent;color:#fff;border:1px solid var(--o)}
+main{max-width:680px;margin:auto;padding:14px}
+.c{background:#fff;border:1px solid var(--l);border-radius:12px;padding:14px;margin-bottom:12px}
+label{display:block;font-size:13px;color:var(--m);margin:10px 0 4px;font-weight:600}
+input{width:100%;padding:12px;border:1px solid #cfc7ac;border-radius:8px;background:var(--b);font-size:16px}
+button{width:100%;padding:13px;border:0;border-radius:10px;background:var(--v);color:#fff;font-size:16px;font-weight:600;margin-top:12px}
+button.o{background:var(--o);color:#1b1500}
+.g{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.s{background:#fff;border:1px solid var(--l);border-radius:10px;padding:10px 4px;text-align:center;font-size:12px;color:var(--m)}
+.s b{display:block;font-size:24px;color:var(--v)}
+.row{border-bottom:1px solid var(--l);padding:10px 0}
+.row small{color:var(--m);display:block}
+.act{display:flex;gap:6px;margin-top:6px}.act button,.act a{flex:1;margin:0;padding:8px;font-size:13px;border-radius:8px;text-align:center;text-decoration:none;color:#fff;background:var(--v2)}
+.act .d{background:#b3261e}.act .w{background:#25a244}
+.bar{display:flex;align-items:center;gap:8px;font-size:14px;margin:4px 0}
+.bar i{display:block;height:10px;background:var(--o);border-radius:5px}
+.err{color:#b3261e;font-size:14px;margin-top:8px}
+.ok{color:var(--v2)}
+.hide{display:none}
+</style>
+</head>
+<body>
+<header><span>Annonces · Administration privée</span><button id="out" class="hide" onclick="auth.signOut()">Quitter</button></header>
+<main>
+<div id="login" class="c">
+<b>Connexion du Directeur général</b>
+<label>E-mail</label><input id="em" type="email" autocomplete="username">
+<label>Mot de passe</label><input id="pw" type="password" autocomplete="current-password">
+<button onclick="connexion()">Se connecter</button>
+<div id="msg" class="err"></div>
+</div>
+<div id="app" class="hide">
+<div class="c"><b>Nouvelle publication</b>
+<label>Type</label><select id="type" onchange="maj()"><option value="pub">Publicité (payante)</option><option value="communique">Communiqué</option><option value="avis">Avis</option></select>
+<div id="empl"><label>Emplacement publicitaire</label><select id="emp"><option>1</option><option>2</option><option>3</option></select><label>WhatsApp de l’annonceur</label><input id="contact" type="tel" placeholder="228..."></div>
+<label>Titre *</label><input id="titre"><label>Texte</label><textarea id="texte" style="width:100%;padding:12px;border:1px solid #cfc7ac;border-radius:8px;min-height:90px;font-size:16px;font-family:inherit"></textarea>
+<label>Du *</label><input id="debut" type="date"><label>Jusqu’au * (la publication disparaît ensuite toute seule)</label><input id="fin" type="date">
+<label>Photo (facultatif)</label><input id="photo" type="file" accept="image/*" onchange="photo()"><img id="prev" class="hide" style="width:100%;border-radius:8px;margin-top:8px">
+<button class="o" id="pub" onclick="publier()">Publier</button></div>
+<div class="c"><b>Publications</b><div id="liste"></div><button onclick="nettoyer()">Supprimer toutes les expirées</button><button onclick="charger()">Actualiser</button></div>
+</div>
+</main>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+firebase.initializeApp({apiKey:"AIzaSyAQDquVqKsi0ZlE5_ZpDd_OOj36JxqlMLk",authDomain:"danyi-todome-darave.firebaseapp.com",projectId:"danyi-todome-darave",storageBucket:"danyi-todome-darave.firebasestorage.app",messagingSenderId:"67769445358",appId:"1:67769445358:web:634e48fc3af89dd56abcff"});
+var auth=firebase.auth(),db=firebase.firestore(),D=[],IMG="",today=new Date().toISOString().slice(0,10);
+function $(i){return document.getElementById(i)}
+function esc(s){return String(s||"").replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function connexion(){$("msg").textContent="";auth.signInWithEmailAndPassword($("em").value.trim(),$("pw").value).catch(function(){$("msg").textContent="E-mail ou mot de passe incorrect."})}
+auth.onAuthStateChanged(function(u){$("login").className=u?"hide":"c";$("app").className=u?"":"hide";$("out").className=u?"":"hide";if(u){$("debut").value=today;charger()}});
+function maj(){$("empl").className=$("type").value=="pub"?"":"hide"}
+function photo(){var f=$("photo").files[0];if(!f)return;var r=new FileReader();r.onload=function(){var i=new Image();i.onload=function(){var s=Math.min(1,900/Math.max(i.width,i.height)),c=document.createElement("canvas");c.width=Math.round(i.width*s);c.height=Math.round(i.height*s);c.getContext("2d").drawImage(i,0,0,c.width,c.height);IMG=c.toDataURL("image/jpeg",0.65);$("prev").src=IMG;$("prev").className=""};i.src=r.result};r.readAsDataURL(f)}
+function publier(){var t=$("titre").value.trim(),d=$("debut").value,f=$("fin").value;
+if(!t||!d||!f){alert("Remplissez le titre et les deux dates.");return}
+if(f<d){alert("La date de fin est avant la date de début.");return}
+var o={type:$("type").value,titre:t,texte:$("texte").value.trim(),debut:d,fin:f,statut:"publie",image:IMG,date:firebase.firestore.FieldValue.serverTimestamp()};
+if(o.type=="pub"){o.emplacement=$("emp").value;o.contact=$("contact").value.trim()}
+$("pub").disabled=true;
+db.collection("annonces").add(o).then(function(){$("titre").value="";$("texte").value="";$("fin").value="";IMG="";$("prev").className="hide";$("photo").value="";$("pub").disabled=false;alert("Publié.");charger()}).catch(function(){$("pub").disabled=false;alert("Erreur. Image trop lourde ou accès refusé.")})}
+function charger(){db.collection("annonces").orderBy("date","desc").get().then(function(s){D=s.docs.map(function(x){var d=x.data();d.id=x.id;return d});liste()}).catch(function(){alert("Accès refusé. Connectez-vous avec le compte du Directeur général.");auth.signOut()})}
+function etat(a){return a.fin<today?"expirée":a.debut>today?"à venir":"en ligne"}
+function liste(){$("liste").innerHTML=D.map(function(a,i){var e=etat(a);return '<div class="row">'+(a.image?'<img alt="" src="'+a.image+'" style="width:100%;max-height:140px;object-fit:cover;border-radius:8px;margin-bottom:6px">':'')+'<b>'+esc(a.titre)+'</b> <span class="'+(e=="en ligne"?"ok":"")+'">'+e+'</span><small>'+(a.type=="pub"?"Publicité · emplacement "+esc(a.emplacement):esc(a.type))+" · du "+a.debut+" au "+a.fin+'</small><div class="act"><button onclick="prolonger('+i+')">+7 jours</button><button class="d" onclick="suppr('+i+')">Retirer</button></div></div>'}).join("")||"<p>Aucune publication.</p>"}
+function prolonger(i){var d=new Date(Math.max(new Date(D[i].fin),new Date(today)));d.setDate(d.getDate()+7);var f=d.toISOString().slice(0,10);db.collection("annonces").doc(D[i].id).update({fin:f}).then(function(){D[i].fin=f;liste()})}
+function suppr(i){if(!confirm("Retirer cette publication ?"))return;db.collection("annonces").doc(D[i].id).delete().then(function(){D.splice(i,1);liste()})}
+function nettoyer(){var X=D.filter(function(a){return a.fin<today});if(!X.length){alert("Aucune publication expirée.");return}if(!confirm("Supprimer "+X.length+" publication(s) expirée(s) ?"))return;Promise.all(X.map(function(a){return db.collection("annonces").doc(a.id).delete()})).then(charger)}
+</script>
+</body>
+</html>
