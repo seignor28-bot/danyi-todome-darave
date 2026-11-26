@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Communauté · Danyi Todomé Daravé</title>
+<style>
+:root{--v:#0f4d2e;--v2:#166b41;--o:#c9a227;--b:#f7f3e8;--t:#1b2a21;--m:#5b665f;--l:#e4dcc3}
+*{box-sizing:border-box}
+body{margin:0;background:var(--b);color:var(--t);font-family:Georgia,'Times New Roman',serif;font-size:17px;line-height:1.5}
+h1,h2,h3,button,label,nav{font-family:system-ui,-apple-system,Segoe UI,sans-serif}
+header{background:var(--v);color:#fff;position:sticky;top:0;z-index:5;border-bottom:3px solid var(--o)}
+.brand{padding:10px 14px 4px;font-weight:700;letter-spacing:.5px;color:var(--o);font-size:15px;font-family:system-ui,sans-serif}
+nav{display:flex;overflow-x:auto;gap:2px;padding:0 8px 6px}
+nav button{flex:0 0 auto;background:none;border:0;color:#fff;padding:8px 12px;font-size:14px;border-radius:8px;opacity:.85}
+nav button.on{background:var(--v2);opacity:1;box-shadow:inset 0 -2px var(--o)}
+.hero{background:var(--v);color:#fff;padding:22px 16px;text-align:center}
+.hero:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent 0 22px,rgba(201,162,39,.07) 22px 24px)}
+.hero>*{position:relative}
+.hero h1{font-size:30px;margin:0 0 10px;color:#fff;line-height:1.15}
+.hero h1 span{color:var(--o)}
+.hero p{font-style:italic;color:var(--o);font-size:19px;margin:0 0 24px}
+.btn{display:inline-block;background:var(--o);color:#1b1500;border:0;border-radius:10px;padding:14px 22px;font-size:17px;font-weight:700;font-family:system-ui,sans-serif;width:auto;margin:4px}
+.btn.s{background:transparent;color:#fff;border:2px solid var(--o)}
+main{max-width:640px;margin:auto;padding:16px}
+section{display:none}section.on{display:block}
+h2{color:var(--v);font-size:23px;margin:6px 0 10px;border-bottom:2px solid var(--o);padding-bottom:6px}
+.c{background:#fff;border:1px solid var(--l);border-radius:12px;padding:14px;margin-bottom:12px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.q{background:var(--v);color:#fff;border-radius:10px;padding:12px;text-align:center;font-family:system-ui,sans-serif;font-weight:600;border-bottom:3px solid var(--o)}
+label{display:block;font-size:13px;color:var(--m);margin:12px 0 4px;font-weight:600}
+input,select{width:100%;padding:12px;border:1px solid #cfc7ac;border-radius:8px;background:var(--b);font-size:16px;color:var(--t)}
+.btn.f{width:100%;margin:16px 0 0}
+.chk{display:flex;gap:10px;align-items:flex-start;margin-top:14px;font-size:14px;font-family:system-ui,sans-serif}
+.chk input{width:22px;height:22px;flex:0 0 22px;margin:0}
+.hp{position:absolute;left:-9999px}
+.card{border:3px double var(--o);background:linear-gradient(#fff,#fbf6e4);border-radius:14px;padding:18px;text-align:center}
+.card h3{margin:0;color:var(--v);font-size:15px;text-transform:uppercase;letter-spacing:1px}
+.card .n{font-size:22px;font-weight:700;margin:12px 0 2px}
+.card .k{font-family:monospace;font-size:20px;color:var(--v);margin-top:10px;font-weight:700}
+.note{background:#fff8dc;border-left:4px solid var(--o);padding:10px 12px;border-radius:6px;font-size:14px;font-family:system-ui,sans-serif}
+footer{background:var(--v);color:#e9e5d3;text-align:center;padding:18px 14px 30px;font-size:13px;font-family:system-ui,sans-serif;border-top:3px solid var(--o)}
+.hide{display:none!important}
+.gal{display:grid;grid-template-columns:1fr 1fr;gap:8px}.gal figure{margin:0;position:relative;border-radius:10px;overflow:hidden;border-bottom:3px solid var(--o)}.gal img{width:100%;display:block;aspect-ratio:4/3;object-fit:cover}.gal figcaption{position:absolute;left:0;right:0;bottom:0;background:linear-gradient(transparent,rgba(10,58,34,.92));color:#fff;padding:16px 8px 6px;font:600 13px system-ui,sans-serif}.ban{width:100%;border-radius:12px;display:block;margin-bottom:12px;border-bottom:3px solid var(--o)}.cap{font-size:12px;color:var(--m);font-family:system-ui,sans-serif;margin:8px 0 0}
+
+.tabs{display:flex;gap:6px;margin-bottom:12px}.tabs button{margin:0;padding:11px 4px;font-size:14px;background:#fff;color:var(--v);border:2px solid var(--v)}.tabs button.on{background:var(--v);color:#fff}
+textarea{width:100%;padding:12px;border:1px solid #cfc7ac;border-radius:8px;background:var(--b);font-size:16px;min-height:80px;font-family:inherit}
+</style></head><body>
+<header><div class="brand">DANYI TODOMÉ DARAVÉ</div><nav><button onclick="location.href='index.html'">← Accueil du site</button></nav></header>
+<div class="hero"><h1 style="font-size:24px;margin:0">Famille, diaspora, compétences</h1><p style="margin:6px 0 0;font-size:15px">Choisissez votre rubrique et remplissez la fiche.</p></div>
+<main>
+<div class="tabs"><button id="t_famille" onclick="show('famille')">Ma famille</button><button id="t_diaspora" onclick="show('diaspora')">Diaspora</button><button id="t_competence" onclick="show('competence')">Compétences</button></div>
+<div id="f" class="c"><div id="champs"></div>
+<input class="hp" id="site" tabindex="-1" autocomplete="off">
+<div class="chk"><input type="checkbox" id="ok"><span id="oktxt"></span></div>
+<button class="btn f" id="envoi" onclick="envoyer()">Envoyer</button></div>
+<div id="res" class="hide"><div class="card"><h3>Fiche reçue</h3><div class="n" id="cn"></div><div class="k" id="ck"></div></div>
+<p class="note">Merci ! Votre fiche est en attente de validation.</p><button class="btn f" onclick="location.reload()">Remplir une autre fiche</button></div>
+</main>
+<footer>© Danyi Todomé Daravé · Plateforme communautaire</footer>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+var QUARTIERS=["Akouvi","Nouoto","Akloboé","Kossifi","Akpa","Adjoto","Quartier 7"];
+var WHATSAPP="22890198565";
+firebase.initializeApp({apiKey:"AIzaSyAQDquVqKsi0ZlE5_ZpDd_OOj36JxqlMLk",authDomain:"danyi-todome-darave.firebaseapp.com",projectId:"danyi-todome-darave",storageBucket:"danyi-todome-darave.firebasestorage.app",messagingSenderId:"67769445358",appId:"1:67769445358:web:634e48fc3af89dd56abcff"});var db=firebase.firestore();
+function $(i){return document.getElementById(i)}
+var COMMUN=[["nom","Nom *","t",1],["prenoms","Prénoms *","t",1],["tel","Numéro WhatsApp *","tel",1],["quartier","Quartier d’origine *","q",1]];
+var FORMS={
+famille:{pre:"FAM",t:"Je déclare ma famille",oui:"J’accepte que les informations de ma famille soient enregistrées pour le recensement de Danyi Todomé Daravé.",f:[["chef","Nom du chef de famille *","t",1],["membres","Nombre de personnes dans le foyer","n"],["enfants","Dont enfants de moins de 18 ans","n"],["besoin","Besoins principaux de la famille","a"]]},
+diaspora:{pre:"DIA",t:"Je suis de la diaspora",oui:"J’accepte que mes informations soient enregistrées pour le recensement de la diaspora de Danyi Todomé Daravé.",f:[["pays","Pays de résidence *","t",1],["ville","Ville de résidence","t"],["profession","Profession","t"],["projet","Comment souhaitez-vous aider le village ?","a"],["disponibilite","Disponibilité","s",0,["Ponctuelle","Régulière","Retour prévu au village"]]]},
+competence:{pre:"COM",t:"Je propose mes compétences",oui:"J’accepte que mes informations soient enregistrées et, après validation, présentées dans l’annuaire des compétences du village.",f:[["metier","Métier ou compétence *","t",1],["experience","Années d’expérience","n"],["offre","Services que vous proposez","a"],["ville","Ville où vous travaillez","t"]]}
+};
+var cur="famille";
+function champ(c){var id=c[0],l=c[1],ty=c[2],h='<label>'+l+'</label>';
+if(ty=="q")return h+'<select id="'+id+'"><option value="">-- Choisir --</option>'+QUARTIERS.map(function(x){return '<option>'+x+'</option>'}).join("")+'</select>';
+if(ty=="s")return h+'<select id="'+id+'">'+c[4].map(function(x){return '<option>'+x+'</option>'}).join("")+'</select>';
+if(ty=="a")return h+'<textarea id="'+id+'"></textarea>';
+return h+'<input id="'+id+'" type="'+(ty=="n"?"number":ty=="tel"?"tel":"text")+'">'}
+function show(t){cur=t;["famille","diaspora","competence"].forEach(function(k){$("t_"+k).className=k==t?"on":""});
+var F=FORMS[t];$("champs").innerHTML='<h2>'+F.t+'</h2>'+COMMUN.concat(F.f).map(champ).join("");$("oktxt").textContent=F.oui}
+show("famille");
+function envoyer(){
+if($("site").value)return;var F=FORMS[cur],all=COMMUN.concat(F.f),d={};
+for(var i=0;i<all.length;i++){var c=all[i],v=$(c[0]).value.trim();if(c[3]&&!v){alert("Remplissez tous les champs marqués d’une étoile (*).");return}if(v)d[c[0]]=v}
+if(!$("ok").checked){alert("Cochez la case d’accord pour continuer.");return}
+var q=QUARTIERS.indexOf(d.quartier)+1,code=F.pre+"-Q"+q+"-"+new Date().getFullYear()+"-"+Math.floor(10000+Math.random()*90000);
+d.type=cur;d.code=code;d.consentement=true;d.statut="en_attente";d.date=firebase.firestore.FieldValue.serverTimestamp();
+$("envoi").disabled=true;$("envoi").textContent="Envoi en cours...";
+db.collection("contributions").doc(code).set(d).then(function(){$("cn").textContent=(d.nom+" "+d.prenoms).toUpperCase();$("ck").textContent=code;$("f").className="hide";$("res").className="";window.scrollTo(0,0)})
+.catch(function(){$("envoi").disabled=false;$("envoi").textContent="Envoyer";alert("Envoi impossible. Vérifiez votre connexion et réessayez.")})}
+</script></body></html>
