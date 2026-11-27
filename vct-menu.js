@@ -11,7 +11,7 @@
     if(hero && !document.getElementById('vct-acces')){
       var a='display:flex;align-items:center;justify-content:center;min-height:50px;margin-top:10px;border-radius:999px;font-weight:700;text-decoration:none;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;';
       var html=
-      '<section id="vct-acces" style="max-width:640px;margin:0 auto;padding:22px 16px 6px;text-align:center">'+
+      '<section class="on"id="vct-acces" style="max-width:640px;margin:0 auto;padding:22px 16px 6px;text-align:center">'+
         '<div style="padding:20px 16px;border-radius:16px;background:#073F3A;border:2px solid #D7AD55;color:#fff">'+
           '<h2 style="margin:0 0 8px;font-size:23px;color:#fff;border:0;padding:0">Le mot du fondateur</h2>'+
           '<p style="margin:0 0 14px;color:#EBD08F;font-family:system-ui,sans-serif;font-size:15px">Un message de Charles kokoroko à toute la communauté.</p>'+
