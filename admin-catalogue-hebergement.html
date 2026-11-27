@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Administration Hébergement – VILLAGE CONNECT TOGO</title>
+<link rel="stylesheet" href="vct.css">
+<style>
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.pad{max-width:760px;margin:0 auto;padding:16px}
+.card{background:#fff;border:1px solid #E4DDC6;border-top:4px solid var(--or);border-radius:14px;padding:14px 16px;margin-bottom:14px}
+label{display:block;font-size:.85rem;font-weight:700;color:var(--vert);margin:10px 0 4px}
+input,select,textarea{width:100%;padding:12px;border:1px solid #cfc7ac;border-radius:10px;background:var(--ivoire);font:1rem inherit}
+textarea{min-height:70px}
+.chk{display:flex;gap:8px;align-items:center;margin:6px 0;font-weight:400}.chk input{width:22px;height:22px}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:0 18px;border-radius:999px;border:0;font:700 1rem inherit;cursor:pointer;text-decoration:none;margin:6px 6px 0 0}
+.or{background:var(--or);color:var(--nuit)}.vert{background:var(--vert);color:#fff}.ligne{background:#fff;border:2px solid var(--vert);color:var(--vert)}.rouge{background:#fff;border:2px solid #9b1c1c;color:#9b1c1c}
+.tabs{display:flex;gap:8px;margin-bottom:14px}.tabs button{flex:1}
+.err{color:#9b1c1c;font-weight:700}.msg{color:var(--vert);font-weight:700}
+.st{display:inline-block;background:#F2E7C4;color:var(--vert);font-weight:700;font-size:.8rem;padding:3px 10px;border-radius:999px}
+small{color:var(--douce)}
+</style></head><body>
+<header class="barre"><a class="marque" href="index.html"><img src="logo.png" alt=""><span>Administration Hébergement</span></a><a class="retour" href="index.html">Accueil</a></header>
+<div class="pad">
+<div id="login" class="card"><h2 style="margin:0 0 6px">Connexion</h2>
+<label for="em">E-mail</label><input id="em" type="email" autocomplete="username">
+<label for="pw">Mot de passe</label><input id="pw" type="password" autocomplete="current-password">
+<button class="btn vert" id="go" type="button">Se connecter</button><div class="err" id="lerr"></div></div>
+<div id="app" style="display:none">
+<div class="tabs"><button class="btn vert" id="t1" type="button">Demandes</button><button class="btn ligne" id="t2" type="button">Établissements</button><button class="btn ligne" id="out" type="button">Quitter</button></div>
+<div id="p1"><div id="rl"></div></div>
+<div id="p2" style="display:none">
+<div class="card"><h2 style="margin:0 0 4px" id="fh">Ajouter un établissement</h2>
+<label for="n">Nom *</label><input id="n">
+<label for="ty">Type *</label><select id="ty"><option>Hôtel</option><option>Auberge</option><option>Motel</option><option>Maison d’hôtes</option></select>
+<label for="v">Ville ou localité *</label><input id="v">
+<label for="ad">Adresse ou repère</label><input id="ad">
+<label for="tf">Tarif à partir de (FCFA par nuit)</label><input id="tf" type="number" min="0">
+<label for="de">Description (types de chambres…)</label><textarea id="de" maxlength="600"></textarea>
+<label>Équipements</label><div id="eq"></div>
+<label for="wa">Numéro WhatsApp (avec l’indicatif, ex. 22890000000)</label><input id="wa" type="tel">
+<label for="ph">Photo : nom du fichier envoyé sur GitHub (ex. hotel-danyi.jpg)</label><input id="ph">
+<label class="chk"><input type="checkbox" id="pu"> Publier cet établissement sur le site</label>
+<button class="btn or" id="sv" type="button">Enregistrer</button><button class="btn ligne" id="nw" type="button">Nouveau</button><div class="msg" id="fm"></div></div>
+<div id="hl"></div></div></div></div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+var CFG={apiKey:"AIzaSyAQDquVqKsiOZlE5_ZpDd_OOj36JxqlMLk",authDomain:"danyi-todome-darave.firebaseapp.com",projectId:"danyi-todome-darave",appId:"1:67769445358:web:634e48fc3af89dd56abcff"};
+var auth=null,db=null;
+function getCfg(cb){
+  fetch("index.html",{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){
+    var m=t.match(/FIREBASE_CONFIG\s*=\s*\{([^}]*)\}/),o={};
+    if(m){var re=/(\w+)\s*:\s*"([^"]*)"/g,p;while((p=re.exec(m[1])))o[p[1]]=p[2]}
+    cb(o.apiKey&&o.projectId?o:CFG);
+  }).catch(function(){cb(CFG)});
+}
+
+function $(i){return document.getElementById(i)}
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+function digits(s){return String(s||"").replace(/\D/g,"")}
+var EQ=["Climatisation","Ventilateur","Wi-Fi","Parking","Restaurant","Eau chaude"],ST=[["demande_envoyee","Demande envoyée"],["en_attente","En attente de confirmation"],["confirmee","Réservation confirmée"],["refusee","Réservation refusée"],["annulee","Réservation annulée"],["sejour_termine","Séjour terminé"]];
+var EDIT=null,HS=[];
+$("eq").innerHTML=EQ.map(function(e,i){return'<label class="chk"><input type="checkbox" class="eqc" value="'+e+'"> '+e+'</label>'}).join("");
+$("go").onclick=function(){$("lerr").textContent="";if(!auth){$("lerr").textContent="Connexion indisponible. Actualisez la page.";return}auth.signInWithEmailAndPassword($("em").value.trim(),$("pw").value).catch(function(e){$("lerr").textContent="Connexion refusée ("+(e&&e.code?e.code:"erreur")+"). Vérifiez l’e-mail et le mot de passe."})};
+$("out").onclick=function(){if(auth)auth.signOut()};
+getCfg(function(c){firebase.initializeApp(c);auth=firebase.auth();db=firebase.firestore();auth.onAuthStateChanged(function(u){$("login").style.display=u?"none":"block";$("app").style.display=u?"block":"none";if(u){loadR();loadH()}})});
+function tab(n){$("p1").style.display=n==1?"block":"none";$("p2").style.display=n==2?"block":"none";$("t1").className="btn "+(n==1?"vert":"ligne");$("t2").className="btn "+(n==2?"vert":"ligne")}
+$("t1").onclick=function(){tab(1)};$("t2").onclick=function(){tab(2)};
+function loadR(){
+  db.collection("reservations").orderBy("date","desc").limit(100).get().then(function(s){
+    var h="";if(s.empty)h='<div class="card">Aucune demande pour le moment.</div>';
+    s.forEach(function(d){var x=d.data();
+      h+='<div class="card"><b>'+esc(x.hebergementNom)+'</b> <span class="st" id="s_'+esc(d.id)+'">'+esc((ST.filter(function(a){return a[0]==x.statut})[0]||[0,x.statut])[1])+'</span><br><small>Réf. '+esc(d.id)+'</small>'+
+      '<p>'+esc(x.nom)+' · '+esc(x.tel)+'<br>Du '+esc(x.arrivee)+' au '+esc(x.depart)+' · '+esc(x.personnes)+' personne(s)'+(x.message?'<br>« '+esc(x.message)+' »':'')+'</p>'+
+      '<select id="c_'+esc(d.id)+'">'+ST.map(function(a){return'<option value="'+a[0]+'"'+(a[0]==x.statut?' selected':'')+'>'+a[1]+'</option>'}).join("")+'</select>'+
+      '<button class="btn vert" data-r="'+esc(d.id)+'" type="button">Changer le statut</button>'+
+      '<a class="btn ligne" target="_blank" rel="noopener" href="https://wa.me/'+digits(x.tel)+'?text='+encodeURIComponent("Bonjour "+x.nom+", au sujet de votre demande "+d.id+" sur VILLAGE CONNECT TOGO.")+'">WhatsApp client</a></div>'});
+    $("rl").innerHTML=h;
+    Array.prototype.forEach.call(document.querySelectorAll("[data-r]"),function(b){b.onclick=function(){var id=b.getAttribute("data-r");db.collection("reservations").doc(id).update({statut:$("c_"+id).value}).then(function(){loadR()}).catch(function(){alert("Échec de la modification.")})}});
+  }).catch(function(){$("rl").innerHTML='<div class="card err">Impossible de lire les demandes. Vérifiez que vous utilisez le compte du Directeur général et que les règles Firestore sont publiées.</div>'});
+}
+function loadH(){
+  db.collection("hebergements").get().then(function(s){
+    HS=[];s.forEach(function(d){var x=d.data();x.id=d.id;HS.push(x)});
+    $("hl").innerHTML=HS.length?HS.map(function(x,i){return'<div class="card"><b>'+esc(x.nom)+'</b> <span class="st">'+(x.publie?"Publié":"Non publié")+'</span><br><small>'+esc(x.type)+' · '+esc(x.ville)+'</small><br><button class="btn ligne" data-e="'+i+'" type="button">Modifier</button><button class="btn rouge" data-d="'+i+'" type="button">Supprimer</button></div>'}).join(""):'<div class="card">Aucun établissement enregistré.</div>';
+    Array.prototype.forEach.call(document.querySelectorAll("[data-e]"),function(b){b.onclick=function(){fill(HS[+b.getAttribute("data-e")])}});
+    Array.prototype.forEach.call(document.querySelectorAll("[data-d]"),function(b){b.onclick=function(){var x=HS[+b.getAttribute("data-d")];if(confirm("Supprimer « "+x.nom+" » ?"))db.collection("hebergements").doc(x.id).delete().then(loadH)}});
+  }).catch(function(){$("hl").innerHTML='<div class="card err">Impossible de lire les établissements.</div>'});
+}
+function clear(){EDIT=null;["n","v","ad","tf","de","wa","ph"].forEach(function(i){$(i).value=""});$("ty").selectedIndex=0;$("pu").checked=false;Array.prototype.forEach.call(document.querySelectorAll(".eqc"),function(c){c.checked=false});$("fh").textContent="Ajouter un établissement";$("fm").textContent=""}
+function fill(x){EDIT=x.id;$("n").value=x.nom||"";$("ty").value=x.type||"Hôtel";$("v").value=x.ville||"";$("ad").value=x.adresse||"";$("tf").value=x.tarif||"";$("de").value=x.description||"";$("wa").value=x.whatsapp||"";$("ph").value=x.photo||"";$("pu").checked=!!x.publie;
+  Array.prototype.forEach.call(document.querySelectorAll(".eqc"),function(c){c.checked=(x.equipements||[]).indexOf(c.value)>-1});$("fh").textContent="Modifier : "+x.nom;$("fm").textContent="";window.scrollTo(0,0)}
+$("nw").onclick=clear;
+$("sv").onclick=function(){
+  var n=$("n").value.trim(),v=$("v").value.trim();if(!n||!v){$("fm").textContent="Le nom et la ville sont obligatoires.";return}
+  var eq=[];Array.prototype.forEach.call(document.querySelectorAll(".eqc"),function(c){if(c.checked)eq.push(c.value)});
+  var d={nom:n,type:$("ty").value,ville:v,adresse:$("ad").value.trim(),tarif:parseInt($("tf").value,10)||0,description:$("de").value.trim(),equipements:eq,whatsapp:digits($("wa").value),photo:$("ph").value.trim(),publie:$("pu").checked};
+  var r=EDIT?db.collection("hebergements").doc(EDIT).set(d):db.collection("hebergements").add(d);
+  r.then(function(){$("fm").textContent="Enregistré.";clear();$("fm").textContent="Enregistré.";loadH()}).catch(function(){$("fm").textContent="Échec de l’enregistrement."});
+};
+</script></body></html>

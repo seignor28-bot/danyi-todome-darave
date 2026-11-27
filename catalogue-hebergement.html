@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VCT Hébergement – VILLAGE CONNECT TOGO</title><meta name="theme-color" content="#052C28">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Nunito+Sans:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="vct.css">
+<style>
+.banniere{min-height:260px}
+.recherche{background:#fff;border:1px solid #E4DDC6;border-top:4px solid var(--or);border-radius:16px;padding:16px;display:grid;gap:10px;margin-bottom:18px}
+.recherche label{font-size:.85rem;font-weight:700;color:var(--vert)}
+input,select,textarea{width:100%;padding:12px;border:1px solid #cfc7ac;border-radius:10px;background:var(--ivoire);font:1rem var(--sans);color:var(--encre)}
+textarea{min-height:80px}
+.hotel{background:#fff;border:1px solid #E4DDC6;border-top:4px solid var(--or);border-radius:16px;overflow:hidden;margin-bottom:16px}
+.hotel img{width:100%;height:190px;object-fit:cover;display:block}
+.hotel .c{padding:16px 18px 18px}
+.hotel h3{font-family:var(--serif);font-size:1.5rem;color:var(--vert);margin:0 0 2px}
+.meta{color:var(--douce);font-size:.95rem;margin:0 0 8px}
+.prix{font-weight:700;color:var(--vert);margin:6px 0}
+.puces{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.puces span{font-size:.8rem;background:#F2E7C4;color:var(--vert);padding:3px 10px;border-radius:999px;font-weight:700}
+.bts{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 20px;border-radius:999px;font-weight:700;border:0;cursor:pointer;text-decoration:none;font:700 1rem var(--sans);flex:1 1 160px}
+.btn.or{background:var(--or);color:var(--nuit)}.btn.vert{background:var(--vert);color:#fff}.btn.ligne{background:#fff;border:2px solid var(--vert);color:var(--vert)}
+.vide{background:#fff;border-left:5px solid var(--or);border-radius:0 12px 12px 0;padding:16px 18px;color:var(--douce)}
+#fond{position:fixed;inset:0;background:rgba(5,44,40,.7);z-index:50;display:none;overflow:auto;padding:16px}
+#fond.on{display:block}
+#boite{background:#fff;border-radius:16px;max-width:520px;margin:20px auto;padding:20px}
+#boite h2{margin:0 0 4px}
+#boite label{display:block;font-size:.85rem;font-weight:700;color:var(--vert);margin:12px 0 4px}
+.hp{position:absolute;left:-9999px}
+.chk{display:flex;gap:10px;align-items:flex-start;margin-top:14px;font-size:.9rem}.chk input{width:22px;height:22px;flex:0 0 22px;margin:0}
+.ok{background:#EAF4EC;border-left:5px solid var(--vert);padding:14px 16px;border-radius:0 12px 12px 0}
+.err{color:#9b1c1c;font-weight:700;margin-top:10px}
+.code{font-family:monospace;font-size:1.3rem;font-weight:700;color:var(--vert);letter-spacing:1px}
+</style></head><body>
+<header class="barre"><a class="marque" href="index.html" aria-label="VILLAGE CONNECT TOGO, accueil"><img src="logo.png" alt=""><span>VILLAGE CONNECT TOGO<small>Danyi Todomé Daravé</small></span></a><a class="retour" href="index.html">Accueil</a></header>
+<section class="banniere"><img src="hebergement-chambre%20%281%29.jpg" alt="Chambre d’hôtel avec lit double et rideaux" width="1000"><div class="texte"><h1>VCT Hébergement</h1><p>Votre séjour, notre connexion.</p></div></section><div class="filet"></div>
+<main>
+<h2>Trouvez votre logement</h2>
+<div class="recherche">
+ <div><label for="q">Ville ou localité</label><input id="q" placeholder="Ex. : Danyi, Lomé, Kpalimé" autocomplete="off"></div>
+ <div><label for="t">Type d’établissement</label><select id="t"><option value="">Tous</option><option>Hôtel</option><option>Auberge</option><option>Motel</option><option>Maison d’hôtes</option></select></div>
+</div>
+<div id="liste"><p class="vide">Chargement des établissements…</p></div>
+<p class="note">Une demande n’est <strong>pas</strong> une réservation confirmée : elle l’est seulement après l’accord de l’établissement. VILLAGE CONNECT TOGO met en relation, il ne garantit pas les disponibilités. <a href="confidentialite.html">Politique de confidentialité</a></p>
+<nav class="autres" aria-label="Nos espaces"><a href="vct-mobilite.html">VCT Mobilité</a><a href="catalogue-hebergement.html" class="ici">VCT Hébergement</a><a href="vct-communaute.html">VCT Communauté</a></nav>
+</main>
+<footer><strong>Ensemble, connectons nos villages</strong><br>VILLAGE CONNECT TOGO</footer>
+
+<div id="fond" role="dialog" aria-modal="true" aria-labelledby="ft"><div id="boite">
+ <div id="formzone">
+  <h2 id="ft">Demande de réservation</h2><p class="meta" id="fh"></p>
+  <label for="nom">Votre nom *</label><input id="nom" autocomplete="name">
+  <label for="tel">Votre numéro WhatsApp *</label><input id="tel" type="tel" autocomplete="tel" placeholder="Ex. : +228 90 00 00 00">
+  <label for="arr">Date d’arrivée *</label><input id="arr" type="date">
+  <label for="dep">Date de départ *</label><input id="dep" type="date">
+  <label for="pers">Nombre de personnes *</label><input id="pers" type="number" min="1" max="20" value="1">
+  <label for="msg">Message (facultatif)</label><textarea id="msg" maxlength="500"></textarea>
+  <input class="hp" id="site" tabindex="-1" autocomplete="off" aria-hidden="true">
+  <div class="chk"><input type="checkbox" id="cons"><span>J’accepte que ces informations soient transmises à l’établissement pour traiter ma demande. <a href="confidentialite.html" target="_blank" rel="noopener">Politique de confidentialité</a></span></div>
+  <div class="err" id="err"></div>
+  <div class="bts"><button class="btn or" id="env" type="button">Envoyer ma demande</button><button class="btn ligne" id="ann" type="button">Annuler</button></div>
+ </div>
+ <div id="okzone" style="display:none"></div>
+</div></div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+var CFG={apiKey:"AIzaSyAQDquVqKsiOZlE5_ZpDd_OOj36JxqlMLk",authDomain:"danyi-todome-darave.firebaseapp.com",projectId:"danyi-todome-darave",appId:"1:67769445358:web:634e48fc3af89dd56abcff"};
+var db=null;
+function getCfg(cb){
+  fetch("index.html",{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){
+    var m=t.match(/FIREBASE_CONFIG\s*=\s*\{([^}]*)\}/),o={};
+    if(m){var re=/(\w+)\s*:\s*"([^"]*)"/g,p;while((p=re.exec(m[1])))o[p[1]]=p[2]}
+    cb(o.apiKey&&o.projectId?o:CFG);
+  }).catch(function(){cb(CFG)});
+}
+
+var HOTELS=[],CUR=null;
+function $(i){return document.getElementById(i)}
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+function digits(s){return String(s||"").replace(/\D/g,"")}
+function wa(num,txt){return "https://wa.me/"+digits(num)+"?text="+encodeURIComponent(txt)}
+function load(){
+  if(!db){$("liste").innerHTML='<p class="vide">Le catalogue n’est pas disponible pour le moment. Réessayez plus tard.</p>';return}
+  db.collection("hebergements").where("publie","==",true).get().then(function(s){
+    HOTELS=[];s.forEach(function(d){var x=d.data();x.id=d.id;HOTELS.push(x)});
+    HOTELS.sort(function(a,b){return String(a.nom).localeCompare(String(b.nom))});render();
+  }).catch(function(){$("liste").innerHTML='<p class="vide">Le catalogue n’est pas disponible pour le moment. Réessayez plus tard.</p>'});
+}
+function render(){
+  var q=$("q").value.trim().toLowerCase(),t=$("t").value,h="";
+  var r=HOTELS.filter(function(x){return(!q||(String(x.ville)+" "+String(x.adresse)).toLowerCase().indexOf(q)>-1)&&(!t||x.type===t)});
+  if(!r.length){$("liste").innerHTML=HOTELS.length?'<p class="vide">Aucun établissement ne correspond à votre recherche.</p>':'<p class="vide">Aucun établissement n’est encore publié. Les premiers établissements seront ajoutés prochainement.</p>';return}
+  r.forEach(function(x,i){
+    h+='<article class="hotel">'+(x.photo?'<img src="'+esc(x.photo)+'" alt="Photo de '+esc(x.nom)+'" loading="lazy">':'')+'<div class="c"><h3>'+esc(x.nom)+'</h3><p class="meta">'+esc(x.type)+' · '+esc(x.ville)+(x.adresse?' · '+esc(x.adresse):'')+'</p>';
+    if(x.tarif)h+='<p class="prix">À partir de '+esc(x.tarif)+' FCFA / nuit</p>';
+    if(x.description)h+='<p>'+esc(x.description)+'</p>';
+    if(x.equipements&&x.equipements.length){h+='<div class="puces">'+x.equipements.map(function(e){return'<span>'+esc(e)+'</span>'}).join("")+'</div>'}
+    h+='<div class="bts"><button class="btn or" data-i="'+HOTELS.indexOf(x)+'">Demander une réservation</button>';
+    if(digits(x.whatsapp))h+='<a class="btn vert" target="_blank" rel="noopener" href="'+wa(x.whatsapp,"Bonjour, je vous contacte depuis VILLAGE CONNECT TOGO au sujet de "+x.nom+".")+'">WhatsApp</a>';
+    h+='</div></div></article>';
+  });
+  $("liste").innerHTML=h;
+  Array.prototype.forEach.call(document.querySelectorAll("[data-i]"),function(b){b.onclick=function(){openForm(HOTELS[+b.getAttribute("data-i")])}});
+}
+function openForm(x){CUR=x;$("fh").textContent=x.nom+" — "+x.ville;$("err").textContent="";$("formzone").style.display="block";$("okzone").style.display="none";
+  var today=new Date().toISOString().slice(0,10);$("arr").min=today;$("dep").min=today;$("fond").className="on"}
+function closeForm(){$("fond").className=""}
+function newCode(){var a="ABCDEFGHJKLMNPQRSTUVWXYZ23456789",b=new Uint8Array(10),c="H-";(window.crypto||window.msCrypto).getRandomValues(b);for(var i=0;i<10;i++)c+=a[b[i]%a.length];return c}
+function envoyer(){
+  if($("site").value)return;
+  var nom=$("nom").value.trim(),tel=$("tel").value.trim(),arr=$("arr").value,dep=$("dep").value,p=parseInt($("pers").value,10),msg=$("msg").value.trim();
+  var e=$("err");e.textContent="";
+  if(!nom||digits(tel).length<8||!arr||!dep){e.textContent="Remplissez votre nom, votre numéro WhatsApp et les dates.";return}
+  if(dep<=arr){e.textContent="La date de départ doit être après la date d’arrivée.";return}
+  if(!(p>=1&&p<=20)){e.textContent="Le nombre de personnes doit être entre 1 et 20.";return}
+  if(!$("cons").checked){e.textContent="Cochez la case pour accepter le traitement de votre demande.";return}
+  var code=newCode(),b=$("env");b.disabled=true;b.textContent="Envoi en cours…";
+  var d={code:code,hebergementId:String(CUR.id),hebergementNom:String(CUR.nom),nom:nom,tel:tel,arrivee:arr,depart:dep,personnes:p,message:msg,statut:"demande_envoyee",consent:true,date:firebase.firestore.FieldValue.serverTimestamp()};
+  var fin=function(sent){
+    var h='<div class="ok"><h2>'+(sent?'Demande envoyée':'Demande à finaliser')+'</h2><p>Référence : <span class="code">'+esc(code)+'</span></p><p><strong>Ce n’est pas une réservation confirmée.</strong> '+(sent?'Elle sera confirmée seulement après l’accord de l’établissement.':'Envoyez-la à l’établissement par WhatsApp.')+'</p></div>';
+    if(digits(CUR.whatsapp))h+='<div class="bts"><a class="btn vert" target="_blank" rel="noopener" href="'+wa(CUR.whatsapp,"Bonjour, demande de réservation "+code+" depuis VILLAGE CONNECT TOGO. Nom : "+nom+". Du "+arr+" au "+dep+", "+p+" personne(s).")+'">Prévenir l’établissement sur WhatsApp</a></div>';
+    h+='<div class="bts"><button class="btn ligne" id="fer" type="button">Fermer</button></div>';
+    $("formzone").style.display="none";$("okzone").innerHTML=h;$("okzone").style.display="block";$("fer").onclick=closeForm;b.disabled=false;b.textContent="Envoyer ma demande";
+  };
+  if(!db){fin(false);return}
+  db.collection("reservations").doc(code).set(d).then(function(){fin(true)}).catch(function(){fin(false)});
+}
+$("env").onclick=envoyer;$("ann").onclick=closeForm;$("q").oninput=render;$("t").onchange=render;
+getCfg(function(c){try{firebase.initializeApp(c);db=firebase.firestore()}catch(e){}load()});
+</script></body></html>
