@@ -1,0 +1,16 @@
+{
+  "name": "VILLAGE CONNECT TOGO",
+  "short_name": "VCT",
+  "description": "Ensemble, connectons nos villages.",
+  "lang": "fr",
+  "start_url": "index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#073F3A",
+  "theme_color": "#073F3A",
+  "icons": [
+    { "src": "vct-icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "vct-icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}
