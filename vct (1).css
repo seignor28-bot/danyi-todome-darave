@@ -1,0 +1,34 @@
+:root{--vert:#073F3A;--nuit:#052C28;--or:#D7AD55;--or2:#EBD08F;--ivoire:#F7F3E8;--encre:#1D2A24;--douce:#4A5A52;
+--serif:"Cormorant Garamond",Georgia,serif;--sans:"Nunito Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--ivoire);color:var(--encre);font:1.0625rem/1.65 var(--sans)}
+a{color:inherit}:focus-visible{outline:3px solid var(--or);outline-offset:3px}
+.barre{position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px;background:var(--nuit);border-bottom:2px solid var(--or)}
+.marque{display:flex;align-items:center;gap:10px;text-decoration:none;color:#fff;min-width:0}
+.marque img{height:42px;width:42px;border-radius:9px;display:block}
+.marque span{font-family:var(--serif);font-weight:700;font-size:1.05rem;letter-spacing:.04em;line-height:1.1}
+.retour{flex:none;text-decoration:none;font-weight:700;font-size:.9rem;color:var(--nuit);background:var(--or);padding:0 14px;border-radius:999px;min-height:40px;display:inline-flex;align-items:center}
+.banniere{position:relative;min-height:320px;display:flex;align-items:flex-end;color:#fff;background:var(--vert)}
+.banniere img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.banniere::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(5,44,40,.15) 0%,rgba(5,44,40,.88) 100%)}
+.banniere .texte{position:relative;z-index:2;padding:28px 20px 32px;max-width:720px}
+.banniere h1{font-family:var(--serif);font-size:clamp(2.2rem,9vw,3.4rem);line-height:1.05;margin:0 0 10px}
+.banniere p{margin:0;color:#F1EBD6;max-width:34ch}
+.filet{height:5px;background:linear-gradient(90deg,transparent,var(--or),transparent)}
+main{max-width:980px;margin:0 auto;padding:30px 16px 10px}
+h2{font-family:var(--serif);font-size:1.8rem;color:var(--vert);margin:0 0 16px;line-height:1.15}
+.cartes{display:grid;gap:18px;grid-template-columns:1fr}
+.carte{background:#fff;border-radius:16px;overflow:hidden;border:1px solid #E4DDC6;border-top:4px solid var(--or)}
+.carte img{width:100%;height:190px;object-fit:cover;display:block}
+.carte div{padding:16px 18px 20px}
+.carte h3{font-family:var(--serif);font-size:1.4rem;color:var(--vert);margin:0 0 6px}
+.carte p{margin:0 0 10px;color:var(--douce)}
+.bientot{display:inline-block;font-size:.82rem;font-weight:700;color:var(--vert);background:#F2E7C4;padding:3px 12px;border-radius:999px}
+.note{margin:26px 0 0;padding:16px 18px;border-left:5px solid var(--or);background:#fff;border-radius:0 12px 12px 0;color:var(--douce);font-size:.97rem}
+.autres{display:flex;flex-wrap:wrap;gap:10px;margin:26px 0 10px}
+.autres a{flex:1 1 140px;text-align:center;text-decoration:none;font-weight:700;padding:13px 10px;border-radius:999px;border:2px solid var(--vert);color:var(--vert);min-height:48px}
+.autres a.ici{background:var(--vert);color:#fff}
+footer{margin-top:30px;background:var(--nuit);color:#B9CCC1;text-align:center;padding:22px 16px calc(22px + env(safe-area-inset-bottom,0px));font-size:.9rem}
+footer strong{color:var(--or2);font-family:var(--serif);font-size:1.1rem;font-weight:600}
+@media(min-width:760px){.barre{padding:12px 32px}.banniere{min-height:420px}.banniere .texte{padding:40px 32px 44px}.cartes{grid-template-columns:repeat(3,1fr)}.carte img{height:170px}}
+.marque small{display:block;font-family:var(--sans);font-weight:600;font-size:.68rem;letter-spacing:.03em;color:var(--or2);margin-top:2px}
