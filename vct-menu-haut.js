@@ -13,9 +13,11 @@ return b;
 var e1=mk('Nos espaces','vct-m-espaces',function(){
 if(typeof go==='function')go('accueil');
 setTimeout(function(){
-var h=[].slice.call(document.querySelectorAll('h1,h2,h3')).find(function(y){return y.textContent.trim()==='Nos espaces'});
-if(h)h.scrollIntoView({behavior:'smooth'});
-},150);
+var h=[].slice.call(document.querySelectorAll('body *')).find(function(y){
+return y.children.length===0&&y.textContent.trim()==='Nos espaces'&&!y.closest('nav');
+});
+if(h)window.scrollTo({top:h.getBoundingClientRect().top+window.pageYOffset-80,behavior:'smooth'});
+},300);
 });
 var e2=mk('Annonces','vct-m-annonces',function(){location.href='vct-annonces.html';});
 if(last){nav.insertBefore(e1,last);nav.insertBefore(e2,last);}
